@@ -1,0 +1,39 @@
+{
+  "name": "http-get-regex-capture",
+  "version": "0.0.0",
+  "description": "Obtain text via an HTTP GET request, and then capture pieces of the text with regular expressions.",
+  "main": "src/engine.js",
+  "homepage": "https://github.com/tom-weatherhead/http-get-regex-capture#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tom-weatherhead/http-get-regex-capture.git"
+  },
+  "bugs": {
+    "url": "https://github.com/tom-weatherhead/http-get-regex-capture/issues"
+  },
+  "scripts": {
+    "start": "node src/cli.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "find-latest-version-numbers-for-ruby-and-node-js": "src/cli.js"
+  },
+  "dependencies": {
+    "q": "^1.5.0",
+    "request": "^2.82.0"
+  },
+  "engine-strict": true,
+  "engines": {
+    "node": ">=8.0.0"
+  },
+  "keywords": [
+    "Node.js",
+    "Ruby",
+    "version"
+  ],
+  "license": "MIT",
+  "author": {
+    "name": "Tom Weatherhead",
+    "url": "https://github.com/tom-weatherhead"
+  }
+}
