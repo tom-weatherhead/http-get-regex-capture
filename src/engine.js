@@ -3,10 +3,11 @@
 'use strict';
 
 const Q = require('q');	// Promises for JavaScript. See https://www.npmjs.com/package/q and https://github.com/kriskowal/q
-const request = require('request');	// See https://www.npmjs.com/package/request
 
-function matchRegexesInWebPage(url, regexes, options = {}) {
+function httpGetRegexCaptureEngine(request, url, regexes, options = {}) {
 	const returnedMatchesAreAlwaysLists = options && options.returnedMatchesAreAlwaysLists;
+	const returnHttpResponseBody = options && options.returnHttpResponseBody;
+	const returnMatchObject = options && options.returnMatchObject;
 
 	let deferred = Q.defer();
 
@@ -17,20 +18,33 @@ function matchRegexesInWebPage(url, regexes, options = {}) {
 			deferred.reject(error);
 		} else {
 			// console.log('Response:', response);
+			// console.log('Body:', body);
 
 			const result = regexes.map(regex => {
+				// console.log('Regex:', regex);
 				let matchResult = { regex: regex, match: '' };	// ..., match: []
-				const match = regex.exec(body);
+				// const match = regex.exec(body);
+				const match = body.match(regex);
 				
 				// TODO: Support the return of multiple captures from a global(/.../g) regex.
 				// TODO: Implement returnedMatchesAreAlwaysLists : matchResult.match = match.slice(1); ?
 
-				if (match.length === 2) {
+				if (regex.global) {
+					matchResult.match = match;
+				} else if (match.length === 2) {
 					matchResult.match = match[1];
 				} else {
 					console.error('Regex', regex, ': match.length is', match.length);
 				}
+
+				if (returnHttpResponseBody) {
+					matchResult.returnHttpResponseBody = body;
+				}
 				
+				if (returnMatchObject) {
+					matchResult.matchObject = match;
+				}
+
 				return matchResult;
 			});
 
@@ -41,4 +55,4 @@ function matchRegexesInWebPage(url, regexes, options = {}) {
 	return deferred.promise;
 }
 
-module.exports = matchRegexesInWebPage;
+module.exports = httpGetRegexCaptureEngine;
