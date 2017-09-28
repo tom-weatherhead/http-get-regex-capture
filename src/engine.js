@@ -7,6 +7,7 @@ const Q = require('q');	// Promises for JavaScript. See https://www.npmjs.com/pa
 function httpGetRegexCaptureEngine(request, url, regexes, options = {}) {
 	const returnedMatchesAreAlwaysLists = options && options.returnedMatchesAreAlwaysLists;
 	const returnHttpResponseBody = options && options.returnHttpResponseBody;
+	const returnHttpResponseStatus = options && options.returnHttpResponseStatus;
 	const returnMatchObject = options && options.returnMatchObject;
 
 	let deferred = Q.defer();
@@ -18,6 +19,8 @@ function httpGetRegexCaptureEngine(request, url, regexes, options = {}) {
 			deferred.reject(error);
 		} else {
 			// console.log('Response:', response);
+			// console.log('Response.statusCode:', response.statusCode);
+			// console.log('Response.statusMessage:', response.statusMessage);
 			// console.log('Body:', body);
 
 			const result = regexes.map(regex => {
@@ -38,9 +41,14 @@ function httpGetRegexCaptureEngine(request, url, regexes, options = {}) {
 				}
 
 				if (returnHttpResponseBody) {
-					matchResult.returnHttpResponseBody = body;
+					matchResult.httpResponseBody = body;
 				}
-				
+
+				if (returnHttpResponseStatus) {
+					matchResult.httpResponseStatusCode = response && response.statusCode;
+					matchResult.httpResponseStatusMessage = response && response.statusMessage;
+				}
+
 				if (returnMatchObject) {
 					matchResult.matchObject = match;
 				}

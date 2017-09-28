@@ -15,7 +15,10 @@ describe('App', function () {
 		it('Rocks!', function (done) {
 			const mockRequest = (url, callback) => {
 				const error = null;
-				const response = null;
+				const response = {
+					statusCode: 200,
+					statusMessage: 'OK'
+				};
 				const body = 'abc bdc adc afa aec';
 
 				callback(error, response, body);
@@ -30,6 +33,7 @@ describe('App', function () {
 			const options = {
 				returnedMatchesAreAlwaysLists: false,
 				returnHttpResponseBody: false,
+				returnHttpResponseStatus: true,
 				returnMatchObject: false
 			};
 
@@ -37,7 +41,9 @@ describe('App', function () {
 				.then(result => {
 					expect(result).to.be.not.null;						// eslint-disable-line no-unused-expressions
 					expect(result.length).to.equal(1);						// eslint-disable-line no-unused-expressions
-					expect(result[0].match).to.be.not.null;						// eslint-disable-line no-unused-expressions
+					expect(result[0].match[0]).to.equal('abc');						// eslint-disable-line no-unused-expressions
+					expect(result[0].httpResponseStatusCode).to.equal(200);						// eslint-disable-line no-unused-expressions
+					expect(result[0].httpResponseStatusMessage).to.equal('OK');						// eslint-disable-line no-unused-expressions
 					expect(result[0].match.length).to.equal(3);						// eslint-disable-line no-unused-expressions
 					expect(result[0].match[0]).to.equal('abc');						// eslint-disable-line no-unused-expressions
 					expect(result[0].match[1]).to.equal('adc');						// eslint-disable-line no-unused-expressions
