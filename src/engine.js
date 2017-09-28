@@ -4,8 +4,8 @@
 
 const Q = require('q');	// Promises for JavaScript. See https://www.npmjs.com/package/q and https://github.com/kriskowal/q
 
-function httpGetRegexCaptureEngine(request, url, regexes, options = {}) {
-	const returnedMatchesAreAlwaysLists = options && options.returnedMatchesAreAlwaysLists;
+function httpGetRegexCaptureEngine (request, url, regexes, options = {}) {
+	// const returnedMatchesAreAlwaysLists = options && options.returnedMatchesAreAlwaysLists;
 	const returnHttpResponseBody = options && options.returnHttpResponseBody;
 	const returnHttpResponseStatus = options && options.returnHttpResponseStatus;
 	const returnMatchObject = options && options.returnMatchObject;
@@ -28,7 +28,7 @@ function httpGetRegexCaptureEngine(request, url, regexes, options = {}) {
 				let matchResult = { regex: regex, match: '' };	// ..., match: []
 				// const match = regex.exec(body);
 				const match = body.match(regex);
-				
+
 				// TODO: Support the return of multiple captures from a global(/.../g) regex.
 				// TODO: Implement returnedMatchesAreAlwaysLists : matchResult.match = match.slice(1); ?
 

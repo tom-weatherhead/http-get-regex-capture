@@ -4,7 +4,7 @@
 
 const matchRegexesInWebPage = require('..');
 
-function testHarness(url, regexes) {
+function testHarness (url, regexes) {
 	matchRegexesInWebPage(url, regexes)
 		.then(result => {
 			console.log('Result:', result);

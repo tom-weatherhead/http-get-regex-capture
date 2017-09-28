@@ -1,4 +1,4 @@
-// thaw-http-json-request/Gruntfile.js
+// http-get-regex-capture/Gruntfile.js
 
 'use strict';
 
@@ -7,7 +7,7 @@ module.exports = function (grunt) {
 	const packageJsonContents = grunt.file.readJSON(packageJsonFilename);
 
 	grunt.initConfig({
-		pkg : packageJsonContents,
+		pkg: packageJsonContents,
 		eslint: {
 			target: [
 				'*.js',
@@ -15,12 +15,12 @@ module.exports = function (grunt) {
 				'test/*.js'
 			]
 		},
-		mochaTest : {
+		mochaTest: {
 			options: {
 				reporter: 'spec'
 			},
-			test : {
-				src : ['test/*_spec.js']
+			test: {
+				src: ['test/*_spec.js']
 			}
 		},
 		nsp: {
