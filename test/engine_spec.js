@@ -10,52 +10,65 @@ const expect = chai.expect;
 // testHarness('https://nodejs.org/en/', [/Download v(\S+)\s+Current/]);
 // testHarness('https://www.ruby-lang.org/en/downloads/', [/The current stable version is (\S+)\.\s+Please/]);
 
+function makeMockRequest (body) {
+	return (url, callback) => {
+		const error = null;
+		const response = {
+			statusCode: 200,
+			statusMessage: 'OK'
+		};
+		//const body = 'abc bdc adc afa aec';
+
+		callback(error, response, body);
+	};
+}
+
 describe('App', function () {
-	describe('Match /(a.c)/g against: abc bdc adc afa aec', function () {
-		it('Rocks!', function (done) {
-			const mockRequest = (url, callback) => {
-				const error = null;
-				const response = {
-					statusCode: 200,
-					statusMessage: 'OK'
-				};
-				const body = 'abc bdc adc afa aec';
+	const testCases = [
+		{
+			body: 'abc bdc adc afa aec',
+			subtestCases: [
+				{
+					regex: /(a.c)/g,
+					expectedMatches: ['abc', 'adc', 'aec']
+				}
+			]
+		}
+	];
 
-				callback(error, response, body);
-			};
+	testCases.forEach(testCase => {
+		// describe('Match regex against: ' + testCase.body, function () {
+		describe('Matching against: ' + testCase.body, function () {
+			it('Rocks!', function (done) {
+				const mockRequest = makeMockRequest(testCase.body);
 
-			const url = '';
+				const url = '';
 
-			const regexes = [
-				/(a.c)/g
-			];
+				const regexes = testCase.subtestCases.map(subtestCase => { return subtestCase.regex; });
 
-			const options = {
-				returnedMatchesAreAlwaysLists: false,
-				returnHttpResponseBody: false,
-				returnHttpResponseStatus: true,
-				returnMatchObject: false
-			};
+				const options = testCase.options || {};
 
-			engine(mockRequest, url, regexes, options)
-				.then(result => {
-					expect(result).to.be.not.null;						// eslint-disable-line no-unused-expressions
-					expect(result.length).to.equal(1);						// eslint-disable-line no-unused-expressions
-					expect(result[0].match[0]).to.equal('abc');						// eslint-disable-line no-unused-expressions
-					expect(result[0].httpResponseStatusCode).to.equal(200);						// eslint-disable-line no-unused-expressions
-					expect(result[0].httpResponseStatusMessage).to.equal('OK');						// eslint-disable-line no-unused-expressions
-					expect(result[0].match.length).to.equal(3);						// eslint-disable-line no-unused-expressions
-					expect(result[0].match[0]).to.equal('abc');						// eslint-disable-line no-unused-expressions
-					expect(result[0].match[1]).to.equal('adc');						// eslint-disable-line no-unused-expressions
-					expect(result[0].match[2]).to.equal('aec');						// eslint-disable-line no-unused-expressions
-					done();
-				})
-				.fail(error => {
-					expect(error).to.be.not.null;						// eslint-disable-line no-unused-expressions
-					expect(null).to.be.not.null;						// eslint-disable-line no-unused-expressions
-					done();
-				})
-				.done();
+				options.returnHttpResponseStatus = true;
+
+				engine(mockRequest, url, regexes, options)
+					.then(result => {
+						expect(result).to.be.not.null;						// eslint-disable-line no-unused-expressions
+						expect(result.httpResponseStatusCode).to.equal(200);
+						expect(result.httpResponseStatusMessage).to.equal('OK');
+						expect(result.regexMatchResults.length).to.equal(testCase.subtestCases.length);
+
+						result.regexMatchResults.map((regexMatchResult, i) => {
+							expect(regexMatchResult.match).to.be.deep.equal(testCase.subtestCases[i].expectedMatches);
+						});
+						done();
+					})
+					.fail(error => {
+						expect(error).to.be.not.null;						// eslint-disable-line no-unused-expressions
+						expect(null).to.be.not.null;						// eslint-disable-line no-unused-expressions
+						done();
+					})
+					.done();
+			});
 		});
 	});
 });

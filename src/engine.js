@@ -22,8 +22,18 @@ function httpGetRegexCaptureEngine (request, url, regexes, options = {}) {
 			// console.log('Response.statusCode:', response.statusCode);
 			// console.log('Response.statusMessage:', response.statusMessage);
 			// console.log('Body:', body);
+			let result = {};
 
-			const result = regexes.map(regex => {
+			if (returnHttpResponseBody) {
+				result.httpResponseBody = body;
+			}
+
+			if (returnHttpResponseStatus) {
+				result.httpResponseStatusCode = response && response.statusCode;
+				result.httpResponseStatusMessage = response && response.statusMessage;
+			}
+
+			result.regexMatchResults = regexes.map(regex => {
 				// console.log('Regex:', regex);
 				let matchResult = { regex: regex, match: '' };	// ..., match: []
 				// const match = regex.exec(body);
@@ -38,15 +48,6 @@ function httpGetRegexCaptureEngine (request, url, regexes, options = {}) {
 					matchResult.match = match[1];
 				} else {
 					console.error('Regex', regex, ': match.length is', match.length);
-				}
-
-				if (returnHttpResponseBody) {
-					matchResult.httpResponseBody = body;
-				}
-
-				if (returnHttpResponseStatus) {
-					matchResult.httpResponseStatusCode = response && response.statusCode;
-					matchResult.httpResponseStatusMessage = response && response.statusMessage;
 				}
 
 				if (returnMatchObject) {
