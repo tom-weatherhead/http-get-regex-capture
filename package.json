@@ -33,12 +33,10 @@
     "grunt-nsp": "^2.3.1",
     "mocha": "^3.5.3"
   },
-  "engine-strict": true,
-  "engines": {
-    "node": ">=8.0.0"
-  },
   "keywords": [
+    "HTTP",
     "Node.js",
+    "regex",
     "Ruby",
     "version"
   ],
