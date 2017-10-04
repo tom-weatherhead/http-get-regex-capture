@@ -5,9 +5,9 @@ The demo app determines the latest stable versions of Node.js and Ruby by scrapi
 
 Git installation and execution instructions:
 
-- Install Git.
-- Install Node.js (e.g. via [nvm](https://github.com/creationix/nvm) or [Nodist](https://github.com/marcelklehr/nodist)).
-- In a terminal:
+Install Git.
+Install Node.js (e.g. via [nvm](https://github.com/creationix/nvm) or [Nodist](https://github.com/marcelklehr/nodist)).
+In a terminal:
 
 	$ npm i -g grunt
 	$ git clone https://github.com/tom-weatherhead/http-get-regex-capture.git
