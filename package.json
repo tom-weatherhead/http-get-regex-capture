@@ -19,7 +19,7 @@
     "test": "grunt"
   },
   "bin": {
-    "find-latest-version-numbers-for-ruby-and-node-js": "src/cli.js"
+    "thaw-latest-version-of": "src/cli.js"
   },
   "dependencies": {
     "q": "^1.5.0",
