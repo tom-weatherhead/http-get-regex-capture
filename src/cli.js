@@ -11,7 +11,17 @@ const targetName = process.argv.length > 2 && process.argv[2];
 function printTargetLatestVersion (url, regexes) {
 	matchRegexesInWebPage(url, regexes)
 		.then(result => {
-			console.log(result.regexMatchResults[0].match);
+			if (!result) {
+				console.error('printTargetLatestVersion: Error: result is null.');
+			} else if (!result.regexMatchResults) {
+				console.error('printTargetLatestVersion: Error: result.regexMatchResults is null.');
+			} else if (result.regexMatchResults.length !== 1) {
+				console.error('printTargetLatestVersion: Error: The length of result.regexMatchResults is', result.regexMatchResults.length, 'rather than 1.');
+			} else if (!result.regexMatchResults[0].match) {
+				console.error('printTargetLatestVersion: Error: result.regexMatchResults[0].match is null.');
+			} else {
+				console.log(result.regexMatchResults[0].match);
+			}
 		}).fail(error => {
 			console.error('printTargetLatestVersion: Error:', error);
 		})
@@ -20,7 +30,7 @@ function printTargetLatestVersion (url, regexes) {
 
 switch (targetName) {
 	case 'node':
-		printTargetLatestVersion('https://nodejs.org/en/', [/Download v(\S+)\s+Current/]);
+		printTargetLatestVersion('https://nodejs.org/en/', [/Download v{0,1}(\S+)\s+Current/]);
 		break;
 
 	case 'ruby':

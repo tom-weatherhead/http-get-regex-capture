@@ -17,7 +17,6 @@ function makeMockRequest (body) {
 			statusCode: 200,
 			statusMessage: 'OK'
 		};
-		//const body = 'abc bdc adc afa aec';
 
 		callback(error, response, body);
 	};
@@ -26,11 +25,49 @@ function makeMockRequest (body) {
 describe('App', function () {
 	const testCases = [
 		{
+			testName: 'Test 01',
 			body: 'abc bdc adc afa aec',
 			subtestCases: [
 				{
 					regex: /(a.c)/g,
+					expectedMatch: 'abc',
 					expectedMatches: ['abc', 'adc', 'aec']
+				}
+			]
+		},
+		{
+			testName: 'Test 02',
+			body: 'Fooabcbar Bazdommet footuvBar Fooxyzbar Fuzzball Fo orstbar',
+			subtestCases: [
+				{
+					regex: /Cad(.*)usd/,
+					expectedMatch: '',
+					expectedMatches: []
+				},
+				{
+					regex: /Baz(.*)met/,
+					expectedMatch: 'dom',
+					expectedMatches: ['dom']
+				},
+				{
+					regex: /Foo(.*?)bar/,
+					expectedMatch: 'abc',
+					expectedMatches: ['abc']
+				},
+				{
+					regex: /Cad(.*)usd/g,			// (.*) is a greedy match; (.*?) is a lazy match.
+					expectedMatch: '',
+					expectedMatches: []
+				},
+				{
+					regex: /Baz(.*)met/g,
+					expectedMatch: 'dom',
+					expectedMatches: ['dom']
+				},
+				{
+					regex: /Foo(.*?)bar/g,
+					expectedMatch: 'abc',
+					expectedMatches: ['abc', 'xyz']
 				}
 			]
 		}
@@ -38,14 +75,11 @@ describe('App', function () {
 
 	testCases.forEach(testCase => {
 		// describe('Match regex against: ' + testCase.body, function () {
-		describe('Matching against: ' + testCase.body, function () {
+		describe(testCase.testName, function () {
 			it('Rocks!', function (done) {
 				const mockRequest = makeMockRequest(testCase.body);
-
 				const url = '';
-
 				const regexes = testCase.subtestCases.map(subtestCase => { return subtestCase.regex; });
-
 				const options = testCase.options || {};
 
 				options.returnHttpResponseStatus = true;
@@ -57,8 +91,9 @@ describe('App', function () {
 						expect(result.httpResponseStatusMessage).to.equal('OK');
 						expect(result.regexMatchResults.length).to.equal(testCase.subtestCases.length);
 
-						result.regexMatchResults.map((regexMatchResult, i) => {
-							expect(regexMatchResult.match).to.be.deep.equal(testCase.subtestCases[i].expectedMatches);
+						result.regexMatchResults.forEach((regexMatchResult, i) => {
+							expect(regexMatchResult.match).to.be.equal(testCase.subtestCases[i].expectedMatch);
+							expect(regexMatchResult.matches).to.be.deep.equal(testCase.subtestCases[i].expectedMatches);
 						});
 						done();
 					})

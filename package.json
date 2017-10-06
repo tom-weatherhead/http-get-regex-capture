@@ -1,6 +1,6 @@
 {
   "name": "http-get-regex-capture",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Obtain text via an HTTP GET request, and then capture pieces of the text with regular expressions.",
   "main": "src/main.js",
   "homepage": "https://github.com/tom-weatherhead/http-get-regex-capture#readme",

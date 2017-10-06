@@ -5,7 +5,6 @@
 const Q = require('q');	// Promises for JavaScript. See https://www.npmjs.com/package/q and https://github.com/kriskowal/q
 
 function httpGetRegexCaptureEngine (request, url, regexes, options = {}) {
-	// const returnedMatchesAreAlwaysLists = options && options.returnedMatchesAreAlwaysLists;
 	const returnHttpResponseBody = options && options.returnHttpResponseBody;
 	const returnHttpResponseStatus = options && options.returnHttpResponseStatus;
 	const returnMatchObject = options && options.returnMatchObject;
@@ -15,13 +14,9 @@ function httpGetRegexCaptureEngine (request, url, regexes, options = {}) {
 	request(url, (error, response, body) => {
 
 		if (error) {
-			console.error('Error:', error);
+			console.error('HTTP GET request resulted in an error:', error);
 			deferred.reject(error);
 		} else {
-			// console.log('Response:', response);
-			// console.log('Response.statusCode:', response.statusCode);
-			// console.log('Response.statusMessage:', response.statusMessage);
-			// console.log('Body:', body);
 			let result = {};
 
 			if (returnHttpResponseBody) {
@@ -34,20 +29,24 @@ function httpGetRegexCaptureEngine (request, url, regexes, options = {}) {
 			}
 
 			result.regexMatchResults = regexes.map(regex => {
-				// console.log('Regex:', regex);
-				let matchResult = { regex: regex, match: '' };	// ..., match: []
-				// const match = regex.exec(body);
-				const match = body.match(regex);
+				let matchResult = { regex: regex, match: '', matches: [] };
 
-				// TODO: Support the return of multiple captures from a global(/.../g) regex.
-				// TODO: Implement returnedMatchesAreAlwaysLists : matchResult.match = match.slice(1); ?
+				// See https://stackoverflow.com/questions/432493/how-do-you-access-the-matched-groups-in-a-javascript-regular-expression
 
-				if (regex.global) {
-					matchResult.match = match;
-				} else if (match.length === 2) {
-					matchResult.match = match[1];
-				} else {
-					console.error('Regex', regex, ': match.length is', match.length);
+				const indexOfCaptureGroup = 1;
+				let match;
+
+				while ((match = regex.exec(body)) !== null) {
+					matchResult.matches.push(match[indexOfCaptureGroup]);
+
+					if (!regex.global) {
+						// See https://stackoverflow.com/questions/31969913/why-does-this-regexp-exec-cause-an-infinite-loop
+						break;
+					}
+				}
+
+				if (matchResult.matches.length > 0) {
+					matchResult.match = matchResult.matches[0];
 				}
 
 				if (returnMatchObject) {
