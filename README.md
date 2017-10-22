@@ -19,7 +19,7 @@ In a terminal:
 	$ npm start node
 	$ npm start ruby
 
-Note: The command "grunt" runs lint and security tests.
+Note: The command "grunt" runs lint, unit, and security tests.
 
 npm installation and execution instructions:
 
