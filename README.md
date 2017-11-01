@@ -1,4 +1,7 @@
 # http-get-regex-capture
+
+[![build status](https://secure.travis-ci.org/tom-weatherhead/http-get-regex-capture.svg)](http://travis-ci.org/tom-weatherhead/http-get-regex-capture)  [![downloads](https://img.shields.io/npm/dt/http-get-regex-capture.svg)](https://www.npmjs.com/package/http-get-regex-capture)
+
 Obtain text via an HTTP GET request, and then capture pieces of the text with regular expressions.
 
 The demo app determines the latest stable versions of Node.js and Ruby by scraping their respective Websites.
