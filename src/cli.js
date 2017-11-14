@@ -29,6 +29,10 @@ function printTargetLatestVersion (url, regexes) {
 }
 
 switch (targetName) {
+	case 'angular':
+		printTargetLatestVersion('https://npmjs.com/packages/@angular/core', [/\<strong\>([0-9\.]+)\<\/strong\>\s*\r{0,1}\n\s*is the latest/]);
+		break;
+
 	case 'node':
 		printTargetLatestVersion('https://nodejs.org/en/', [/Download v{0,1}(\S+)\s+Current/]);
 		break;
